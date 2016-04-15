@@ -20,18 +20,23 @@
 
     <!-- 2. Configure SystemJS -->
     <script>
-      System.config({
-        packages: {
-          app: {
-            format: 'register',
-            defaultExtension: 'js'
-          },
-          breeze: {
-            format: 'register',
-            defaultExtension: 'js'
-          }
-        }
-      });
+      // TODO: should generate these barrel registrations on the fly
+      var packages = [
+        'app',
+        'app/entities'
+      ].reduce(function(barrelConfig, barrelName) {
+        barrelConfig[barrelName] = {
+          format: 'register',
+          defaultExtension: 'js',
+          main: 'index'
+        };
+        return barrelConfig;
+      }, {});
+
+      // Additions
+      packages.breeze =  {format: 'register', defaultExtension: 'js'};
+
+      System.config({packages: packages});
       System.import('app/main')
             .then(null, console.error.bind(console));
     </script>

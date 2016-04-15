@@ -7,3 +7,4 @@ export * from './OrderDetail';
 export * from './Product';
 
 export * from './_RegistrationHelper';
+export * from './northwind.bz.metadata';

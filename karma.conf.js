@@ -1,7 +1,8 @@
 module.exports = function(config) {
 
-  var appBase   = 'app/';     // transpiled app JS files
-  var appAssets ='base/app/'; // component assets fetched by Angular's compiler
+  var appBase    = 'app/';     // transpiled app JS files
+  var breezeBase = 'breeze/';  // transpiled breeze JS files
+  var appAssets  = 'base/app/'; // component assets fetched by Angular's compiler
 
   config.set({
     basePath: '',
@@ -35,9 +36,16 @@ module.exports = function(config) {
       { pattern: 'node_modules/angular2/bundles/http.dev.js', included: true, watched: true },
       { pattern: 'node_modules/angular2/bundles/router.dev.js', included: true, watched: true },
       { pattern: 'node_modules/a2-in-memory-web-api/web-api.js', included: true, watched: true },
+      { pattern: 'breeze/breeze.debug.js', included: true, watched: true },
+
 
       // Configures module loader w/ app and specs, then launch karma
       { pattern: 'karma-test-shim.js', included: true, watched: true },
+
+      // transpiled breeze code paths loaded via module imports
+      {pattern: breezeBase + '**/*.js', included: false, watched: true},
+      {pattern: breezeBase + '**/*.ts', included: false, watched: false},
+      {pattern: breezeBase + '**/*.js.map', included: false, watched: false},
 
       // transpiled application & spec code paths loaded via module imports
       {pattern: appBase + '**/*.js', included: false, watched: true},
@@ -50,6 +58,7 @@ module.exports = function(config) {
       // paths for debugging with source maps in dev tools
       {pattern: appBase + '**/*.ts', included: false, watched: false},
       {pattern: appBase + '**/*.js.map', included: false, watched: false}
+
     ],
 
     // proxied base paths for loading assets

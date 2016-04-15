@@ -1,6 +1,6 @@
 import {Component} from 'angular2/core';
 import { EntityManagerService } from './entity-manager.service';
-import { Customer } from './entities/Customer';
+import { Customer } from './entities';
 
 @Component({
   selector: 'my-app',
