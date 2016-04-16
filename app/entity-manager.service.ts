@@ -1,12 +1,6 @@
 import { Injectable } from 'angular2/core';
-import { Http }       from 'angular2/http';
 
-import { _RegistrationHelper } from './entities';
-import { Q } from '../breeze/q';
-import { METADATA } from './entities';
-
-// Configure Breeze for Angular ... exactly once.
-breeze.config.setQ(<breeze.promises.IPromiseService>Q);
+import { MetadataStoreService } from './metadata-store.service';
 
 let webApiUrl = 'http://learn.breezejs.com/api/northwind/';
 
@@ -15,20 +9,15 @@ export class EntityManagerService {
 
   entityManager: breeze.EntityManager;
 
-  constructor() {
+  constructor(metadataStoreService: MetadataStoreService) {
     let dataservice = new breeze.DataService({
       serviceName: webApiUrl,
       hasServerMetadata: false
     });
 
-    let metadataStore = new breeze.MetadataStore();
-    metadataStore.importMetadata(METADATA);
-
     this.entityManager = new breeze.EntityManager({
       dataService: dataservice,
-      metadataStore: metadataStore
+      metadataStore: metadataStoreService.metadataStore
     });
-
-    _RegistrationHelper.register(metadataStore);
   }
 }

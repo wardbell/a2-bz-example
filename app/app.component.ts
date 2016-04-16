@@ -1,11 +1,12 @@
 import {Component} from 'angular2/core';
 import { EntityManagerService } from './entity-manager.service';
+import { MetadataStoreService } from './metadata-store.service';
 import { Customer } from './entities';
 
 @Component({
   selector: 'my-app',
   template: '<h1>My customer name is {{customer.companyName}}</h1>',
-  providers: [EntityManagerService]
+  providers: [EntityManagerService, MetadataStoreService]
 })
 export class AppComponent {
   private _em: breeze.EntityManager;

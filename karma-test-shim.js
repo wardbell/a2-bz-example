@@ -1,8 +1,6 @@
 /*global jasmine, __karma__, window*/
 (function () {
 
-// Error.stackTraceLimit = Infinity;
-
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000;
 
 // Cancel Karma's synchronous start,

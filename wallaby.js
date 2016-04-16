@@ -14,7 +14,8 @@ module.exports = function () {
       {pattern: 'node_modules/zone.js/dist/jasmine-patch.js', instrument: false},
       {pattern: 'breeze/breeze.debug.js', instrument: false },
 
-      {pattern: '(app|breeze)/**/*.(ts|html|css)', load: false},
+      {pattern: 'app/**/*+(ts|html|css)', load: false},
+      {pattern: 'breeze/**/*.ts', load: false},
       {pattern: 'app/**/*.spec.ts', ignore: true}
     ],
 
@@ -35,7 +36,7 @@ module.exports = function () {
 
       // TODO: should generate these barrel registrations on the fly
       var packages = [
-        'app/entities'
+        'entities'
       ].reduce(function(barrelConfig, barrelName) {
         barrelConfig[appPackage + '/' + barrelName] = {
           format: 'register',
@@ -49,14 +50,12 @@ module.exports = function () {
         defaultJSExtensions: true,
         packages: packages,
         paths: {
-          'npm:*': 'node_modules/*',
-          'breeze:*': 'breeze/*'
+          'npm:*': 'node_modules/*'
         },
         map: {
           'angular2': 'npm:angular2',
           'rxjs': 'npm:rxjs',
-          'a2-in-memory-web-api': 'npm:a2-in-memory-web-api',
-          'breeze': 'breeze:breeze'
+          'a2-in-memory-web-api': 'npm:a2-in-memory-web-api'
         }
       });
 

@@ -1,12 +1,15 @@
 /* tslint:disable:no-unused-variable */
 import { AppComponent } from './app.component';
 import { EntityManagerService } from './entity-manager.service';
+import { MetadataStoreService,
+         TestMetadataStoreService} from './metadata-store.service';
 
 import {
   beforeEach, beforeEachProviders, withProviders,
   describe, ddescribe, xdescribe,
   expect, it, iit, xit,
-  inject, injectAsync, fakeAsync, TestComponentBuilder, tick
+  inject, injectAsync,
+  ComponentFixture, TestComponentBuilder
 } from 'angular2/testing';
 
 import { provide }        from 'angular2/core';
@@ -29,25 +32,28 @@ describe('AppComponent smoke test', () => {
 });
 
 describe('AppComponent', function() {
-  beforeEachProviders(() => [
-    EntityManagerService
-  ]);
 
-  it('should instantiate component',
-      injectAsync([TestComponentBuilder], (tcb: TestComponentBuilder) => {
+  let comp:    AppComponent;
+  let fixture: ComponentFixture;
 
-        return tcb.createAsync(AppComponent).then(fixture => {
-          expect(fixture.componentInstance instanceof AppComponent).toBe(true, 'should create AppComponent');
-        });
-      }));
+  beforeEach(injectAsync([TestComponentBuilder], (tcb: TestComponentBuilder) => {
+    return tcb.overrideProviders(AppComponent, [
+      EntityManagerService,
+      provide(MetadataStoreService, {useClass: TestMetadataStoreService})
+    ])
+    .createAsync(AppComponent).then(fix => {
+      fixture = fix;
+      comp = fixture.componentInstance;
+    });
+  }));
 
-  it('should have expected <h1> text',
-      injectAsync([TestComponentBuilder], (tcb: TestComponentBuilder) => {
+  it('should instantiate component', () => {
+    expect(comp instanceof AppComponent).toBe(true, 'should create AppComponent');
+  });
 
-        return tcb.createAsync(AppComponent).then(fixture => {
-          // fixture.detectChanges();  // need for a binding; we don't have one
-          let h1 = fixture.debugElement.query(el => el.name === 'h1').nativeElement;
-          expect(h1.innerText).toMatch(/customer name is acme/i, '<h1> should display "Acme" customer name');
-        });
-      }));
+  it('should have expected <h1> text', () => {
+    fixture.detectChanges();
+    let h1 = fixture.debugElement.query(el => el.name === 'h1').nativeElement;
+    expect(h1.innerText).toMatch(/customer name is acme/i, '<h1> should display "Acme" customer name');
+  });
 });
