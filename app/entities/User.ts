@@ -13,12 +13,12 @@ export class User extends EntityBase {
 
    // Generated code. Do not place code below this line.
    id: number;
-   rowVersion: number;
    userName: string;
    userPassword: string;
    firstName: string;
    lastName: string;
    email: string;
+   rowVersion: number;
    createdBy: string;
    createdByUserId: number;
    createdDate: Date;

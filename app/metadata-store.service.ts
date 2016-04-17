@@ -1,13 +1,10 @@
 import { Injectable } from 'angular2/core';
-import { Http }       from 'angular2/http';
+import 'rxjs/Rx'; // Add all operators to Observable (make sure)
 
 import { _RegistrationHelper } from './entities';
-import { Q } from '../breeze/q';
 import { METADATA } from './entities';
 
-
-// Configure Breeze for Angular ... exactly once.
-breeze.config.setQ(<breeze.promises.IPromiseService>Q);
+breeze.NamingConvention.camelCase.setAsDefault();
 
 let origRegister = breeze.MetadataStore.prototype.registerEntityTypeCtor;
 

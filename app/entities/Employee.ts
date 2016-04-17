@@ -1,6 +1,6 @@
 import { EntityBase } from './EntityBase';
-import { EmployeeTerritory } from './EmployeeTerritory';
 import { Order } from './Order';
+import { EmployeeTerritory } from './EmployeeTerritory';
 
 /// <code-import> Place custom imports between <code-import> tags
 
@@ -14,7 +14,6 @@ export class Employee extends EntityBase {
 
    // Generated code. Do not place code below this line.
    employeeID: number;
-   rowVersion: number;
    lastName: string;
    firstName: string;
    title: string;
@@ -32,9 +31,9 @@ export class Employee extends EntityBase {
    notes: string;
    photoPath: string;
    reportsToEmployeeID: number;
-   fullName: string;
-   manager: Employee;
+   rowVersion: number;
    directReports: Employee[];
+   manager: Employee;
    employeeTerritories: EmployeeTerritory[];
    orders: Order[];
 }

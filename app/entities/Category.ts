@@ -13,10 +13,10 @@ export class Category extends EntityBase {
 
    // Generated code. Do not place code below this line.
    categoryID: number;
-   rowVersion: number;
    categoryName: string;
    description: string;
    picture: any;
+   rowVersion: number;
    products: Product[];
 }
 

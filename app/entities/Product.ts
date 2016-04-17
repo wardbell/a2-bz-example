@@ -1,6 +1,6 @@
 import { EntityBase } from './EntityBase';
-import { Supplier } from './Supplier';
 import { Category } from './Category';
+import { Supplier } from './Supplier';
 
 /// <code-import> Place custom imports between <code-import> tags
 
@@ -14,7 +14,6 @@ export class Product extends EntityBase {
 
    // Generated code. Do not place code below this line.
    productID: number;
-   rowVersion: number;
    productName: string;
    supplierID: number;
    categoryID: number;
@@ -23,7 +22,10 @@ export class Product extends EntityBase {
    unitsInStock: number;
    unitsOnOrder: number;
    reorderLevel: number;
-   supplier: Supplier;
+   discontinued: boolean;
+   discontinuedDate: Date;
+   rowVersion: number;
    category: Category;
+   supplier: Supplier;
 }
 

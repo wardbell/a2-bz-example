@@ -1,38 +1,36 @@
-import { Location } from './Location';
-import { Customer } from './Customer';
-import { Supplier } from './Supplier';
-import { User } from './User';
+import { Category } from './Category';
 import { Product } from './Product';
+import { Supplier } from './Supplier';
+import { Customer } from './Customer';
+import { Order } from './Order';
 import { Employee } from './Employee';
 import { EmployeeTerritory } from './EmployeeTerritory';
-import { Region } from './Region';
-import { NextId } from './NextId';
-import { Order } from './Order';
-import { UserRole } from './UserRole';
 import { Territory } from './Territory';
-import { InternationalOrder } from './InternationalOrder';
+import { Region } from './Region';
 import { OrderDetail } from './OrderDetail';
+import { InternationalOrder } from './InternationalOrder';
+import { PreviousEmployee } from './PreviousEmployee';
 import { Role } from './Role';
-import { Category } from './Category';
+import { UserRole } from './UserRole';
+import { User } from './User';
 
 export class _RegistrationHelper {
 
     static register(metadataStore: breeze.MetadataStore) {
-        metadataStore.registerEntityTypeCtor('Location', Location);
-        metadataStore.registerEntityTypeCtor('Customer', Customer);
-        metadataStore.registerEntityTypeCtor('Supplier', Supplier);
-        metadataStore.registerEntityTypeCtor('User', User);
+        metadataStore.registerEntityTypeCtor('Category', Category);
         metadataStore.registerEntityTypeCtor('Product', Product);
+        metadataStore.registerEntityTypeCtor('Supplier', Supplier);
+        metadataStore.registerEntityTypeCtor('Customer', Customer);
+        metadataStore.registerEntityTypeCtor('Order', Order);
         metadataStore.registerEntityTypeCtor('Employee', Employee);
         metadataStore.registerEntityTypeCtor('EmployeeTerritory', EmployeeTerritory);
-        metadataStore.registerEntityTypeCtor('Region', Region);
-        metadataStore.registerEntityTypeCtor('NextId', NextId);
-        metadataStore.registerEntityTypeCtor('Order', Order);
-        metadataStore.registerEntityTypeCtor('UserRole', UserRole);
         metadataStore.registerEntityTypeCtor('Territory', Territory);
-        metadataStore.registerEntityTypeCtor('InternationalOrder', InternationalOrder);
+        metadataStore.registerEntityTypeCtor('Region', Region);
         metadataStore.registerEntityTypeCtor('OrderDetail', OrderDetail);
+        metadataStore.registerEntityTypeCtor('InternationalOrder', InternationalOrder);
+        metadataStore.registerEntityTypeCtor('PreviousEmployee', PreviousEmployee);
         metadataStore.registerEntityTypeCtor('Role', Role);
-        metadataStore.registerEntityTypeCtor('Category', Category);
+        metadataStore.registerEntityTypeCtor('UserRole', UserRole);
+        metadataStore.registerEntityTypeCtor('User', User);
     }
 }

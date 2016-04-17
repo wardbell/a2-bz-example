@@ -1,6 +1,6 @@
 import { EntityBase } from './EntityBase';
-import { User } from './User';
 import { Role } from './Role';
+import { User } from './User';
 
 /// <code-import> Place custom imports between <code-import> tags
 
@@ -13,10 +13,10 @@ export class UserRole extends EntityBase {
    /// </code>
 
    // Generated code. Do not place code below this line.
-   id: number;
+   iD: number;
    userId: number;
    roleId: number;
-   user: User;
    role: Role;
+   user: User;
 }
 

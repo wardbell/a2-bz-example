@@ -1,6 +1,6 @@
 ﻿/**
  * Minimum necessary deferred object for breeze Q/ES6 Promise adapter
- * Makes ES6 promise look like Q. 
+ * Makes ES6 promise look like Q.
  */
 export interface Deferred {
     promise: Promise<any>;
@@ -18,12 +18,12 @@ export const Q = {
         let promise = new Promise((_resolve, _reject) => {
             resolve = _resolve;
             reject = _reject;
-        })
+        });
         return {
             promise: promise,
             resolve(value: any) { resolve(value); },
             reject(reason: any) { reject(reason); }
-        }
+        };
     },
 
     resolve(value?: {} | PromiseLike<{}>) {
@@ -38,4 +38,4 @@ export const Q = {
         deferred.reject(reason);
         return deferred.promise;
     }
-}
+};

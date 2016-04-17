@@ -13,9 +13,9 @@ export class InternationalOrder extends EntityBase {
 
    // Generated code. Do not place code below this line.
    orderID: number;
-   rowVersion: number;
    customsDescription: string;
    exciseTax: number;
+   rowVersion: number;
    order: Order;
 }
 

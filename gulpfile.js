@@ -35,7 +35,7 @@ gulp.task('generate-entities', function () {
   tsGen.generate({
     inputFileName: metadataFilename,
     outputFolder: outputFolder,
-    camelCase: false,
+    camelCase: true,
     baseClassName: 'EntityBase'
   });
 });

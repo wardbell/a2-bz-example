@@ -1,5 +1,4 @@
 import { EntityBase } from './EntityBase';
-import { Location } from './Location';
 import { Product } from './Product';
 
 /// <code-import> Place custom imports between <code-import> tags
@@ -14,14 +13,18 @@ export class Supplier extends EntityBase {
 
    // Generated code. Do not place code below this line.
    supplierID: number;
-   rowVersion: number;
    companyName: string;
    contactName: string;
    contactTitle: string;
-   location: Location;
+   address: string;
+   city: string;
+   region: string;
+   postalCode: string;
+   country: string;
    phone: string;
    fax: string;
    homePage: string;
+   rowVersion: number;
    products: Product[];
 }
 

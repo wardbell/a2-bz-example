@@ -15,6 +15,7 @@ import {
 import { provide }        from 'angular2/core';
 import { ViewMetadata }   from 'angular2/core';
 import { PromiseWrapper } from 'angular2/src/facade/promise';
+import { Angular2Bridge } from '../breeze/angular2-bridge';
 
 /////////// Module Preparation ///////////////////////
 interface Done {
@@ -24,13 +25,6 @@ interface Done {
 
 ////////  SPECS  /////////////
 
-/// Delete this: verify can use Angular testing's DOM abstraction to access DOM
-describe('AppComponent smoke test', () => {
-  it('should run a passing test', () => {
-    expect(true).toEqual(true, 'should pass');
-  });
-});
-
 describe('AppComponent', function() {
 
   let comp:    AppComponent;
@@ -38,6 +32,7 @@ describe('AppComponent', function() {
 
   beforeEach(injectAsync([TestComponentBuilder], (tcb: TestComponentBuilder) => {
     return tcb.overrideProviders(AppComponent, [
+      Angular2Bridge,
       EntityManagerService,
       provide(MetadataStoreService, {useClass: TestMetadataStoreService})
     ])

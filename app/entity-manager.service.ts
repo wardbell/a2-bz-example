@@ -2,7 +2,7 @@ import { Injectable } from 'angular2/core';
 
 import { MetadataStoreService } from './metadata-store.service';
 
-let webApiUrl = 'http://learn.breezejs.com/api/northwind/';
+let webApiUrl = 'http://sampleservice.breezejs.com/api/northwind';
 
 @Injectable()
 export class EntityManagerService {

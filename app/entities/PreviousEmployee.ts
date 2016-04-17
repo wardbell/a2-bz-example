@@ -1,30 +1,34 @@
 import { EntityBase } from './EntityBase';
-import { Order } from './Order';
 
 /// <code-import> Place custom imports between <code-import> tags
 
 /// </code-import>
 
-export class Customer extends EntityBase {
+export class PreviousEmployee extends EntityBase {
 
    /// <code> Place custom code between <code> tags
    
    /// </code>
 
    // Generated code. Do not place code below this line.
-   customerID: string;
-   customerID_OLD: string;
-   companyName: string;
-   contactName: string;
-   contactTitle: string;
+   employeeID: number;
+   lastName: string;
+   firstName: string;
+   title: string;
+   titleOfCourtesy: string;
+   birthDate: Date;
+   hireDate: Date;
    address: string;
    city: string;
    region: string;
    postalCode: string;
    country: string;
-   phone: string;
-   fax: string;
+   homePhone: string;
+   extension: string;
+   photo: any;
+   notes: string;
+   photoPath: string;
+   reportsToEmployeeID: number;
    rowVersion: number;
-   orders: Order[];
 }
 

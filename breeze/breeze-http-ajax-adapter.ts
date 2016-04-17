@@ -1,6 +1,8 @@
 // Angular 2 httpx adapter
 // based on https://docs.angularjs.org/api/ng/service/http
-import { Http, Headers, Request, Response } from 'angular2/http';
+
+import { Http, Headers, Request, RequestOptions, Response } from 'angular2/http';
+
 
 /**
  * Ajax http response abstraction expected by Breeze DataServiceAdapter
@@ -22,7 +24,7 @@ interface DsaConfig {
   url: string;
   type?: string;
   dataType?: string;
-  contentType?: string;
+  contentType?: string | boolean;
   crossDomain?: string;
   headers?: { };
   data?: any;
@@ -34,81 +36,69 @@ interface DsaConfig {
 let core = breeze.core;
 
 ////////////////////
-
 export class AjaxAngular2Adapter {
-  name = 'angular2';
+  static adapterName = 'angular2';
+  name = AjaxAngular2Adapter.adapterName;
   defaultSettings = {};
-  http: Http = null;
-  requestInterceptor = (info: { }) => {};
+  requestInterceptor: (info: { }) => {};
+
+  constructor(public http: Http) {}
 
   initialize () {}
-
-  setHttp (http) { this.http = http; }
 
   ajax (config: DsaConfig) {
     if (!this.http) {
       throw new Error('Unable to locate angular http module for ajax adapter');
     }
 
-    // http request object?
-    let ngConfig: { };
-
-    let ngConfigMap = {
-      method:      config.type,
-      url:         config.url,
-      data:        config.data || undefined,
-      dataType:    config.dataType,
-      contentType: config.contentType,
-      crossDomain: config.crossDomain,
-      headers:     config.headers || {}
-    };
-
-    // TODO: convert dataType, contentType, and crossDomain into headers for http
-
-    if (config.params) {
-      // Hack: because of the way that Angular handles writing parameters out to the url.
-      // so this approach takes over the url param writing completely.
-      let delim = (ngConfigMap.url.indexOf('?') >= 0) ? '&' : '?';
-      ngConfigMap.url = ngConfigMap.url + delim + encodeParams(config.params);
-    }
-
+    // merge default DataSetAdapter Settings with config arg
     if (!core.isEmpty(this.defaultSettings)) {
       let compositeConfig = core.extend({}, this.defaultSettings);
-      ngConfig = core.extend(compositeConfig, ngConfigMap);
+      config = <DsaConfig> core.extend(compositeConfig, config);
       // extend is shallow; extend headers separately
       let headers = core.extend({}, this.defaultSettings['headers']); // copy default headers 1st
-      ngConfig['headers'] = core.extend(headers, ngConfigMap.headers);
+      config['headers'] = core.extend(headers, config.headers);
     }
 
-    /* Background on building the http request
-    http.request(req: Request)
-    new Request(reqArgs: RequestArgs)
-    interface RequestArgs {
-        url: string;
-        method?: string | RequestMethod;
-        search?: string | URLSearchParams;
-        headers?: Headers;
-        body?: string;
+    if (config.crossDomain) {
+      throw new Error(this.name + ' does not support JSONP (jQuery.ajax:crossDomain) requests');
     }
-    */
-    // http insists on string body
-    let body: any = ngConfig['data'];
+
+    let url = config.url;
+    if (!core.isEmpty(config.params)) {
+      // Hack: Not sure how Angular handles writing 'search' parameters to the url.
+      // so this approach takes over the url param writing completely.
+      let delim = (url.indexOf('?') >= 0) ? '&' : '?';
+      url = url + delim + encodeParams(config.params);
+    }
+
+    let headers = new Headers(config.headers || {});
+    if (!headers.has('Content-Type')) {
+      if (config.contentType !== false) {
+        headers.set('Content-Type',
+         <string> config.contentType || 'application/json; charset=utf-8');
+      }
+    }
+
+    // Create the http request body which must be stringified
+    let body: any = config.data;
     if ( body && typeof body !== 'string') {
       body = JSON.stringify(body);
     };
 
-    let reqArgs = {
-      url:     <string> ngConfig['url'],
-      method:  <string> ngConfig['method'] || 'GET',
-      headers: <Headers> ngConfig ['headers'],
-      body: body
-    };
+    let reqOptions = new RequestOptions({
+      url: url,
+      method: (config.type || 'GET').toUpperCase(),
+      headers: headers,
+      body: body,
+    });
 
-    let request = new Request(reqArgs);
+    let request = new Request(reqOptions);
 
     let requestInfo = {
       adapter: this,      // this adapter
-      config: request,    // angular's http configuration object
+      requestOptions: reqOptions, // angular's http requestOptions
+      request: request,   // the http request from the requestOptions
       dsaConfig: config,  // the config arg from the calling Breeze DataServiceAdapter
       success: successFn, // adapter's success callback
       error: errorFn      // adapter's error callback
@@ -121,9 +111,9 @@ export class AjaxAngular2Adapter {
       }
     }
 
-    if (requestInfo.config) { // exists unless requestInterceptor killed it.
-///// TODO FIX THIS!
-      return this.http.request(requestInfo.config)
+    if (requestInfo.request) { // exists unless requestInterceptor killed it.
+      return this.http.request(requestInfo.request)
+        .map(extractData)
         .toPromise()
         .then(requestInfo.success)
         .catch(requestInfo.error);
@@ -131,59 +121,68 @@ export class AjaxAngular2Adapter {
       return Promise.resolve(null);
     }
 
-    function successFn(res: Response) {
-      if (res.status < 200 || res.status >= 300) {
-        throw Response;
+    function extractData(response: Response) {
+      let data: any;
+      let dt = requestInfo.dsaConfig.dataType;
+      // beware:`res.json` and `res.text` will be async some day
+      if (dt && dt !== 'json') {
+        data = response.text ? response.text() : null;
+      } else {
+        data = response.json ? response.json() : null;
       }
-      // beware:`res.json` will be async some day
-      let data = res.json ? res.json() : null;
+      return {data, response};
+    }
+
+    function successFn({data, response}) {
+      if (response.status < 200 || response.status >= 300) {
+        throw {data, response};
+      }
 
       let httpResponse: HttpResponse = {
-        config: requestInfo.config,
+        config: requestInfo.request,
         data: data,
-        getHeaders: makeGetHeaders(res),
-        ngConfig: requestInfo.config,
-        status: res.status,
-        statusText: res.statusText,
-        response: res
+        getHeaders: makeGetHeaders(response),
+        ngConfig: requestInfo.request,
+        status: response.status,
+        statusText: response.statusText,
+        response: response
       };
       config.success(httpResponse);
       return Promise.resolve(httpResponse);
     }
 
-
-    function errorFn(res: (Response | Error)) {
-      if (res instanceof Error) {
-        return Promise.reject(res); // program error; nothing we can do
+    function errorFn(arg: {data: any, response: Response} | Error) {
+      if (arg instanceof Error) {
+        return Promise.reject(arg); // program error; nothing we can do
       } else {
-
-        // beware:`res.json` will be async some day
-        let data = res.json ? res.json() : null;
+        let data = arg.data;
+        let response = arg.response;
 
         // Timeout appears as an error with status===0 and no data.
-        if (res.status === 0 && data == null) {
+        if (response.status === 0 && data == null) {
           data = 'timeout';
         }
 
         let httpResponse: HttpResponse = {
-          config: requestInfo.config,
+          config: requestInfo.request,
           data: data,
-          getHeaders: makeGetHeaders(res),
-          ngConfig: requestInfo.config,
-          status: res.status,
-          statusText: res.statusText,
-          response: res
+          getHeaders: makeGetHeaders(response),
+          ngConfig: requestInfo.request,
+          status: response.status,
+          statusText: response.statusText,
+          response: response
         };
         config.error(httpResponse);
         return Promise.reject(httpResponse);
       }
     }
   };
+
 }
 
 ///// Helpers ////
 
-function encodeParams(obj: { }) {
+export function encodeParams(obj: { }) {
   let query = '';
   let subValue, innerObj, fullSubName;
 
@@ -222,9 +221,7 @@ function encodeParams(obj: { }) {
   return query.length ? query.substr(0, query.length - 1) : query;
 }
 
-function makeGetHeaders(res: Response) {
-  let headers = res.headers;
-  return function getHeaders(headerName?: string) { return headers.getAll(headerName); };
+export function makeGetHeaders(res: Response) {
+      let headers = res.headers;
+    return function getHeaders(headerName?: string) { return headers.getAll(headerName); };
 }
-
-breeze.config.registerAdapter('ajax', AjaxAngular2Adapter);

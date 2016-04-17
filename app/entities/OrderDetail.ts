@@ -13,12 +13,12 @@ export class OrderDetail extends EntityBase {
    /// </code>
 
    // Generated code. Do not place code below this line.
-   rowVersion: number;
    orderID: number;
    productID: number;
    unitPrice: number;
    quantity: number;
    discount: number;
+   rowVersion: number;
    order: Order;
    product: Product;
 }

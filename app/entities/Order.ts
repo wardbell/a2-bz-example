@@ -1,8 +1,8 @@
 import { EntityBase } from './EntityBase';
 import { Customer } from './Customer';
 import { Employee } from './Employee';
-import { InternationalOrder } from './InternationalOrder';
 import { OrderDetail } from './OrderDetail';
+import { InternationalOrder } from './InternationalOrder';
 
 /// <code-import> Place custom imports between <code-import> tags
 
@@ -16,7 +16,6 @@ export class Order extends EntityBase {
 
    // Generated code. Do not place code below this line.
    orderID: number;
-   rowVersion: number;
    customerID: string;
    employeeID: number;
    orderDate: Date;
@@ -29,9 +28,10 @@ export class Order extends EntityBase {
    shipRegion: string;
    shipPostalCode: string;
    shipCountry: string;
+   rowVersion: number;
    customer: Customer;
    employee: Employee;
-   internationalOrder: InternationalOrder;
    orderDetails: OrderDetail[];
+   internationalOrder: InternationalOrder;
 }
 

@@ -14,10 +14,10 @@ export class Territory extends EntityBase {
 
    // Generated code. Do not place code below this line.
    territoryID: number;
-   rowVersion: number;
    territoryDescription: string;
    regionID: number;
-   region: Region;
+   rowVersion: number;
    employeeTerritories: EmployeeTerritory[];
+   region: Region;
 }
 

@@ -13,10 +13,10 @@ export class EmployeeTerritory extends EntityBase {
    /// </code>
 
    // Generated code. Do not place code below this line.
-   id: number;
-   rowVersion: number;
+   iD: number;
    employeeID: number;
    territoryID: number;
+   rowVersion: number;
    employee: Employee;
    territory: Territory;
 }
