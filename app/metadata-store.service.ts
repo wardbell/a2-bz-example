@@ -6,8 +6,6 @@ import { METADATA } from './entities';
 
 breeze.NamingConvention.camelCase.setAsDefault();
 
-let origRegister = breeze.MetadataStore.prototype.registerEntityTypeCtor;
-
 @Injectable()
 export class MetadataStoreService {
 
@@ -25,6 +23,8 @@ export class MetadataStoreService {
     _RegistrationHelper.register(this.metadataStore);
   }
 }
+
+let origRegister = breeze.MetadataStore.prototype.registerEntityTypeCtor;
 
 @Injectable()
 export class TestMetadataStoreService extends MetadataStoreService {

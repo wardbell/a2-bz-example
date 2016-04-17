@@ -3,7 +3,6 @@
 
 import { Http, Headers, Request, RequestOptions, Response } from 'angular2/http';
 
-
 /**
  * Ajax http response abstraction expected by Breeze DataServiceAdapter
  */

@@ -36,7 +36,8 @@ module.exports = function(config) {
       { pattern: 'node_modules/angular2/bundles/http.dev.js', included: true, watched: true },
       { pattern: 'node_modules/angular2/bundles/router.dev.js', included: true, watched: true },
       { pattern: 'node_modules/a2-in-memory-web-api/web-api.js', included: true, watched: true },
-      { pattern: 'breeze/breeze.debug.js', included: true, watched: true },
+      { pattern: 'node_modules/breeze-client/build/breeze.debug.js', included: true, watched: true },
+      // { pattern: 'breeze/breeze.debug.js', included: true, watched: true },
 
 
       // Configures module loader w/ app and specs, then launch karma

@@ -12,7 +12,9 @@ module.exports = function () {
       {pattern: 'node_modules/zone.js/dist/zone.js', instrument: false},
       {pattern: 'node_modules/zone.js/dist/long-stack-trace-zone.js', instrument: false},
       {pattern: 'node_modules/zone.js/dist/jasmine-patch.js', instrument: false},
-      {pattern: 'breeze/breeze.debug.js', instrument: false },
+
+      {pattern: 'node_modules/breeze-client/build/breeze.min.js', instrument: false},
+    //  {pattern: 'breeze/breeze.debug.js', instrument: false },
 
       {pattern: 'app/**/*+(ts|html|css)', load: false},
       {pattern: 'breeze/**/*.ts', load: false},
