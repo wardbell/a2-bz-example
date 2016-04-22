@@ -30,8 +30,12 @@ export class AppComponent {
   customers: Customer[];
   numInCache: number;
 
-  constructor(private _emService: EntityManagerService, nwService: NorthwindService, bridge: Angular2Bridge) {
- this._em = _emService.entityManager;
+  constructor(
+    private _emService: EntityManagerService,
+    nwService: NorthwindService,
+    bridge: Angular2Bridge) {
+
+    this._em = _emService.entityManager;
     this.customer = <Customer>this._em.createEntity('Customer', { customerID: 'ABC' });
     this.customer.companyName = 'Acme';
 

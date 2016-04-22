@@ -47,6 +47,7 @@
     "karma-htmlfile-reporter": "^0.2.2",
     "karma-jasmine": "^0.3.8",
     "lite-server": "^2.2.0",
+    "lodash": "^4.11.1",
     "protractor": "^3.2.2",
     "rimraf": "^2.5.2",
     "typescript": "^1.8.10",
